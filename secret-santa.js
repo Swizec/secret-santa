@@ -1,24 +1,34 @@
 
+SantaTips = new Mongo.Collection("santa_tips");
+
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault("counter", 0);
+    Template.body.events({
+        'submit .santa-tip': function (event) {
+            var tip = event.target["santa-tip"].value;
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get("counter");
-    }
-  });
+            Meteor.call("updateSantaTip", {santaTip: tip});
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set("counter", Session.get("counter") + 1);
-    }
-  });
+            return false;
+        }
+    });
 }
 
 if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-  });
+    Meteor.startup(function () {
+        // code to run on server at startup
+    });
+    
+    Meteor.methods({
+        updateSantaTip: function (tip) {
+            var currentUser = Meteor.user();
+
+            SantaTips.update(
+                {userId: currentUser._id},
+                {userId: currentUser._id,
+                 santaTip: tip.santaTip
+                },
+                {upsert: true}
+            );
+        }
+    });
 }

@@ -6,7 +6,6 @@
 
 meteor-platform
 autopublish
-insecure
 ian:bootstrap-3
 stevezhu:lodash
 ian:accounts-ui-bootstrap-3
