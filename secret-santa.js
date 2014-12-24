@@ -18,7 +18,8 @@ if (Meteor.isClient) {
                 santaTip = null;
 
             if (user) {
-                santaTip = SantaTips.findOne({userId: user._id}).santaTip;
+                var _tip = SantaTips.findOne({userId: user._id});
+                santaTip = _tip ? _tip.santaTip : "";
             }
 
             return santaTip;
