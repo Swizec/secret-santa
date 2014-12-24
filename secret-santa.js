@@ -11,6 +11,19 @@ if (Meteor.isClient) {
             return false;
         }
     });
+
+    Template.body.helpers({
+        myTip: function () {
+            var user = Meteor.user(),
+                santaTip = null;
+
+            if (user) {
+                santaTip = SantaTips.findOne({userId: user._id}).santaTip;
+            }
+
+            return santaTip;
+        }
+    });
 }
 
 if (Meteor.isServer) {
