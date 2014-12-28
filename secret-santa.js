@@ -12,8 +12,8 @@ if (Meteor.isClient) {
                                .css("opacity", 1)
                                .html("")
                                .addClass("text-success")
-                               .html("Saved!")
-                               .fadeTo(1000, 0);
+                               .html("Your tip has been sent to the Elves for processing!")
+                               .fadeTo(10000, 0);
                        });
 
             return false;
