@@ -6,7 +6,15 @@ if (Meteor.isClient) {
         'submit .santa-tip': function (event) {
             var tip = event.target["santa-tip"].value;
 
-            Meteor.call("updateSantaTip", {santaTip: tip});
+            Meteor.call("updateSantaTip", {santaTip: tip},
+                       function () {
+                           $(".feedback")
+                               .css("opacity", 1)
+                               .html("")
+                               .addClass("text-success")
+                               .html("Saved!")
+                               .fadeTo(1000, 0);
+                       });
 
             return false;
         }
