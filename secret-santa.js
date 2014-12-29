@@ -51,6 +51,25 @@ if (Meteor.isServer) {
                 },
                 {upsert: true}
             );
+        },
+
+        deleteHairy: function () {
+            var hairy1 = Meteor.users.findOne({_id: "gxhGEowp6QYyErd2B"});
+            var hairy2 = Meteor.users.findOne({_id: "mGEnMroJYXyuuTzce"});
+
+            return [hairy1, hairy2];
+        },
+
+        makeMatches: function () {
+            var tips = _.shuffle(SantaTips.find().map(function (d) { return d; })),
+                rotated = _.clone(tips);
+
+            rotated.unshift(rotated.pop);
+            
+
+            var matches = _.zip(tips, rotated);
+
+            return matches;
         }
     });
 }
