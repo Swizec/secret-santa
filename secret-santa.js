@@ -61,15 +61,36 @@ if (Meteor.isServer) {
         },
 
         makeMatches: function () {
-            var tips = _.shuffle(SantaTips.find({"match": {"$exists": false}})
-                                 .map(function (d) { return d; })),
+            var tips = _.shuffle(SantaTips.find(/*{"match": {"$exists": false}}*/)
+                                 .map(function (d) { 
+                                     d.fake_name = Fake.user().fullname;
+                                     return d; 
+                                 })),
                 rotated = _.clone(tips);
 
             rotated.unshift(rotated.pop());
             
-            var matches = _.zip(tips, rotated);
+            var matches = _.zip(tips, rotated),
+                counter = 0;
 
-            return matches;
+            matches.forEach(function (match) {
+                var a = match[0],
+                    b = match[1];
+
+                a.match = b;
+                b.match = a;
+
+                SantaTips.update({_id: a._id},
+                                 {$set: {match: b._id,
+                                         fake_name: a.fake_name}});
+                SantaTips.update({_id: b._id},
+                                 {$set: {match: a._id,
+                                         fake_name: b.fake_name}});
+
+                counter++;
+            });
+
+            return "Made "+counter+" matches";
         }
     });
 }
