@@ -31,6 +31,37 @@ if (Meteor.isClient) {
             }
 
             return santaTip;
+        },
+
+        myTip_html: function () {
+            var user = Meteor.user(),
+                santaTip = null;
+
+            if (user) {
+                var _tip = SantaTips.findOne({userId: user._id});
+                santaTip = _tip ? _tip.santaTip : "";
+            }
+
+            return santaTip.replace(/\n/g, "<br>");
+        },
+
+        match: function () {
+            var user = Meteor.user(),
+                match = null;
+
+            if (user) {
+                var _tip = SantaTips.findOne({userId: user._id});
+
+                if (_tip.match) {
+                    match = SantaTips.findOne({_id: _tip.match});
+                }
+            }
+
+            if (match) {
+                match.santaTip = match.santaTip.replace(/\n/g, "<br>");
+            }
+
+            return match;
         }
     });
 }
