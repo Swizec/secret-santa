@@ -127,13 +127,17 @@ if (Meteor.isServer) {
         notifyMatches: function () {
             var counter = 0;
 
+            var emails = [];
+
             SantaTips.find({match: {$exists: true}})
                 .map(function (tip) {
                     var match = SantaTips.findOne({_id: tip.match}),
                         email = Meteor.users.findOne({_id: tip.userId}).emails[0].address;
 
-                    Meteor.Sendgrid.send({
-                        to: 'swizec@swizec.com',
+                    //emails.push([email, match, Meteor.Sendgrid, Meteor.Sendgrid.send]);
+
+                    Email.send({
+                        to: email,
                         from: 'swizec@swizec.com',
                         subject: "Dear Secret Santa",
                         text: ["Hi Santa,", "You are gifting: "+match.fake_name,
@@ -145,7 +149,7 @@ if (Meteor.isServer) {
                     counter++;
                 });
 
-            return "Sent "+counter+" emails";
+            return ["Sent "+counter+" emails", emails];
         }
     });
 }
