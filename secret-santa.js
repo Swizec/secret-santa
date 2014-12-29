@@ -61,12 +61,12 @@ if (Meteor.isServer) {
         },
 
         makeMatches: function () {
-            var tips = _.shuffle(SantaTips.find().map(function (d) { return d; })),
+            var tips = _.shuffle(SantaTips.find({"match": {"$exists": false}})
+                                 .map(function (d) { return d; })),
                 rotated = _.clone(tips);
 
-            rotated.unshift(rotated.pop);
+            rotated.unshift(rotated.pop());
             
-
             var matches = _.zip(tips, rotated);
 
             return matches;
