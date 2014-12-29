@@ -91,6 +91,30 @@ if (Meteor.isServer) {
             });
 
             return "Made "+counter+" matches";
+        },
+
+        notifyMatches: function () {
+            var counter = 0;
+
+            SantaTips.find({match: {$exists: true}})
+                .map(function (tip) {
+                    var match = SantaTips.findOne({_id: tip.match}),
+                        email = Meteor.users.findOne({_id: tip.userId}).emails[0].address;
+
+                    Meteor.Sendgrid.send({
+                        to: 'swizec@swizec.com',
+                        from: 'swizec@swizec.com',
+                        subject: "Dear Secret Santa",
+                        text: ["Hi Santa,", "You are gifting: "+match.fake_name,
+                               "Their secret hint is:", match.santaTip,
+                               "", "Have fun!",
+                              "PS: you can still check your own tip at secret-santa.meteor.com"].join("\n\n")
+                    });
+
+                    counter++;
+                });
+
+            return "Sent "+counter+" emails";
         }
     });
 }
