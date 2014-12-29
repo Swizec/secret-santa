@@ -92,7 +92,7 @@ if (Meteor.isServer) {
         },
 
         makeMatches: function () {
-            var tips = _.shuffle(SantaTips.find(/*{"match": {"$exists": false}}*/)
+            var tips = _.shuffle(SantaTips.find({"match": {"$exists": false}})
                                  .map(function (d) { 
                                      d.fake_name = Fake.user().fullname;
                                      return d; 
