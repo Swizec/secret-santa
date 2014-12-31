@@ -150,6 +150,21 @@ if (Meteor.isServer) {
                 });
 
             return ["Sent "+counter+" emails", emails];
+        },
+
+        getMatches: function () {
+            return _.shuffle(SantaTips
+                             .find({match: {$exists: true}})
+                             .map(function (tip) {
+                                 var email = Meteor.users
+                                         .findOne({_id: tip.userId})
+                                         .emails[0].address;
+                                 
+                                 return {email: email, name: tip.fake_name};
+                             }))
+                .map(function (match) {
+                    return [match.name, match.email].join(" -> ");
+                });
         }
     });
 }
